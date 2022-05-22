@@ -1,25 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
 import web3 from './web3';
-
+import lottery from './lottery';
+import {useState,useEffect} from 'react';
 function App() {
-  console.log(web3);
+    const [manager,setManager]=useState();
+    const [players,setPlayers]=useState([]);
+    const [balance,setBalance]=useState(0);
+    useEffect(()=>{
+      lottery.methods.manager().call().then((m)=>setManager(m));
+      lottery.methods.getPlayers().call().then((p)=>setPlayers(p));
+      web3.eth.getBalance(lottery.options.address).then((b)=>setBalance(b));
+    },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>{manager}</p>
     </div>
   );
 }
